@@ -1,0 +1,4 @@
+CREATE DATABASE jakub;
+USE jakub;
+CREATE TABLE osoba (id INT AUTO_INCREMENT, imie VARCHAR(15), nazwisko VARCHAR(30), PRIMARY KEY (id));
+CREATE TABLE dane (dane_id int auto_increment, plec VARCHAR(20), wiek int, primary key (dane_id), FOREIGN KEY (osoba_id) REFERENCES osoba(id));
