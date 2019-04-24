@@ -1,4 +1,7 @@
-CREATE DATABASE IF NOT EXISTS jakub;
+CREATE DATABASE jakub;
 USE jakub;
-CREATE TABLE IF NOT EXISTS osoba (id INT AUTO_INCREMENT, imie VARCHAR(15), nazwisko VARCHAR(30), PRIMARY KEY (id));
-CREATE TABLE IF NOT EXISTS dane (dane_id int auto_increment, plec VARCHAR(20), wiek int, primary key (dane_id), FOREIGN KEY (osoba_id) REFERENCES osoba(id));
+CREATE TABLE osoba (id INT AUTO_INCREMENT, imie VARCHAR(15), nazwisko VARCHAR(30), PRIMARY KEY (id));
+insert into osoba values(1, "Jakub", "Pas"),(2, "Adam", "Nowak"),(3, "Jan", "Kowalski");
+
+CREATE TABLE dane (dane_id int auto_increment, osoba_id int, plec VARCHAR(20), wiek int, primary key (dane_id), FOREIGN KEY (osoba_id) REFERENCES osoba(id));
+insert into dane values(1, 1, "M", 23),(2, 2, "M", 43),(3, 3, "M", 76);
