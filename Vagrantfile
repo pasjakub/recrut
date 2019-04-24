@@ -8,36 +8,34 @@ Vagrant.configure("2") do |config|
    vb.memory = "1024"
  end
  
- config.vm.define "apache" do |web|
-   web.vm.hostname = "apache"
-   web.vm.box = "hashicorp/precise64"
-   web.vm.network :private_network, ip: "192.168.100.10"
-   web.vm.network "forwarded_port", guest: "80", host: "8080"
-   web.vm.synced_folder "D:\\PI VMs\\Training\\Shared", "/shared"
+ config.vm.define "ubuntu" do |ubnt|
+   ubnt.vm.hostname = "ubuntu"
+   ubnt.vm.box = "hashicorp/precise64"
+   ubnt.vm.network :private_network, ip: "192.168.100.10"
+   ubnt.vm.network "forwarded_port", guest: "80", host: "8080"
 
-   web.vm.provider "virtualbox" do |vb|
-     vb.name = "ansible-apache-002"
+   ubnt.vm.provider "virtualbox" do |vb|
+     vb.name = "ubuntu"
    end
 
-   web.vm.provision "ansible_local" do |ansible|
-     ansible.playbook="apache-playbook.yaml"
+   ubnt.vm.provision "ansible_local" do |ansible|
+     ansible.playbook="playbook.yaml"
      ansible.install_mode = "pip"
      ansible.verbose="vvvv"
    end
   end
 
-  config.vm.define "tomcat" do |tom|
-   tom.vm.hostname = "tomcat"
-   tom.vm.box = "hashicorp/precise64"
-   tom.vm.network :private_network, ip: "192.168.100.11"
-   tom.vm.synced_folder "D:\\PI VMs\\Training\\Shared", "/shared"
+  config.vm.define "centos" do |cent|
+   cent.vm.hostname = "centos"
+   cent.vm.box = "centos/7"
+   cent.vm.network :private_network, ip: "192.168.100.11"
 
-   tom.vm.provider "virtualbox" do |vb|
-     vb.name = "anbsible-tomcat-002"
+   cent.vm.provider "virtualbox" do |vb|
+     vb.name = "centos"
    end
 
-   tom.vm.provision "ansible_local" do |ansible|
-     ansible.playbook="tomcat-playbook.yaml"
+   cent.vm.provision "ansible_local" do |ansible|
+     ansible.playbook="playbook.yaml"
      ansible.install_mode = "pip"
      ansible.verbose="vvvv"
    end
