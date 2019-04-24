@@ -1,0 +1,16 @@
+Release process:
+
+The main tool is a monitoring service, which checks whether there was a code commit. If the new code was commited the build of the application is triggered and the unit test are started. The monitoring service should register any output from the actions. Next step can be a provisioning a test environment, in which the application will be deployed and tested further. At this step the manual testers can be involved to check if the application behavior is applicable for a production environment and the decision is made, whether to promote it to the production environment or not. The results and/or bugs are saved and the teams are notified.
+
+Steps:
+1. Code commit
+2. Build and unit tests
+3. Provisioning a environment and testing the application there
+4. Decision about promoting to production or repairing the bugs
+
+
+Tools:
+Jenkins - monitoring the whole process
+Maven, Gradle - building the application
+Ansbile, Chef, Puppet - provisioning the environment
+Docker - provisioning containers, creating image with the built application, creating an environment
