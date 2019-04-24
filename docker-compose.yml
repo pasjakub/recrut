@@ -5,7 +5,7 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: 'db'
+      MYSQL_DATABASE: 'jakub'
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
@@ -24,7 +24,7 @@ services:
     expose:
       - '6379'
     volumes:
-      - ../data/redis:/data
+      - redis-vol:/data
   nginx:
     container_name: nginx
     restart: always
@@ -33,6 +33,12 @@ services:
       - '8080:80'
     expose:
       - '8080'
+    volumes:
+      - nginx-vol-conf:/etc/nginx
+      - nginx-vol-www:/usr/share/nginx/html
     
 volumes:
   mysql-vol:
+  redis-vol:
+  nginx-vol-conf:
+  nginx-vol-www:
