@@ -15,7 +15,7 @@ services:
     expose:
       - '3306'
     volumes:
-      - ./mysql-db:/var/lib/mysql
+      - mysql-vol:/var/lib/mysql
       - ./mysql-dump:/docker-entrypoint-initdb.d
   redis:
     container_name: redis
