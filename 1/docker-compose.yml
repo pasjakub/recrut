@@ -4,6 +4,7 @@ services:
     container_name: mysql
     image: mysql:5.7
     restart: always
+    command: mysqld --user=root
     environment:
       MYSQL_DATABASE: 'jakub'
       MYSQL_USER: 'user'
@@ -14,7 +15,8 @@ services:
     expose:
       - '3306'
     volumes:
-      - mysql-vol:/var/lib/mysql
+      - ./mysql-db:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
   redis:
     container_name: redis
     restart: always
@@ -23,6 +25,9 @@ services:
       - '6379:6379'
     expose:
       - '6379'
+
+    depends_on:
+      - db
     volumes:
       - redis-vol:/data
   nginx:
@@ -33,6 +38,8 @@ services:
       - '8080:80'
     expose:
       - '8080'
+    depends_on:
+      - redis
     volumes:
       - nginx-vol-conf:/etc/nginx
       - nginx-vol-www:/usr/share/nginx/html
