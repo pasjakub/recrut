@@ -2,70 +2,51 @@
 - hosts: all
 
   vars:
-    domain: "tomcatansible.inz"
-    docroot: "/var/www/tomcatansible.inz"
-
-  handlers:
-    - name: restart apache
-      become: yes
-      become_user: root
-      service: name=apache2 state=restarted
+    cent-host: "centos-host"
+    ubuntu-host: "ubuntu-host"
 
   tasks:
 
-    - name: Sprawdzenie czy Apache jest w najnowszej wersji
+    - name: Installing apache
       become: yes
       become_user: root
       apt:
         name: apache2
         state: latest
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-    - name: Stworzenie katalogów sites-available i sites-enabled
+    - name: Installing httpd
       become: yes
       become_user: root
-      file:
-        dest: "{{ item }}"
-        owner: root
-        group: root
-        mode: 0644
-        state: directory
-      with_items:
-        - "/etc/apache2/sites-enabled"
-        - "/etc/apache2/sites-available"
+      yum:
+        name: httpd
+        state: latest
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
-    - name: Modyfikacja domyślnego pliku konfiguracyjnego Apache
+    - name: Inserting webpage
       become: yes
       become_user: root
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: root
-        group: root
-        mode: 0644
-      with_items:
-        - {src: '/shared/Ansible/basic_vh.conf.j2', dest: '/etc/apache2/sites-available/{{ domain }}.conf'}
-        - {src: '/shared/Ansible/httpd.conf.j2', dest: '/etc/apache2/httpd.conf'}
       
-    - name: Stworzenie katalogu domowego strony
-      become: yes
-      become_user: root
-      file:
-        dest: "{{ docroot }}"
-        mode: 0755
-        owner: root
-        group: root
-        state: directory
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-    - name: Utworzenie symlinku do strony w sites-enabled 
+    - name: Installing webpage
       become: yes
       become_user: root
-      file:
-        src: "/etc/apache2/sites-available/{{ domain }}.conf"
-        dest: "/etc/apache2/sites-enabled/{{ domain }}.conf"
-        state: link
-      notify: restart apache
+      
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
-    - name: Sprawdzenie czy Apache jest uruchomiony
-      become: yes
-      become_user: root
-      service: name=apache2 state=restarted
+
+
+    - name: restart apache
+      service: 
+        name: apache2 
+        state: started 
+        enabled: yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: restart httpd
+      service: 
+        name: httpd 
+        state: started 
+        enabled: yes
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
